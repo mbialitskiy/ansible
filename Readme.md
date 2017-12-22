@@ -1,7 +1,7 @@
 You need PyGithub to run this plugin
 usage:
 
- -debug:
+- debug:
       msg : "{{ lookup('lookup_git', username, password) }} " - show all repos for user
 
 - debug:
