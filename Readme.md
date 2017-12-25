@@ -1,11 +1,6 @@
-You need PyGithub to run this plugin
-usage:
+##Trainig in writings plugins for ansible
 
-- debug:
-      msg : "{{ lookup('lookup_git', username, password) }} " - show all repos for user
+1. lookup plugin search content in github
+2. cache plagin stores facts in MySql db
 
-- debug:
-      msg : "{{ lookup('lookup_git', username, password, repository_name) }} " - show files in repo
-
-- debug:
-      msg : "{{ lookup('lookup_git', username, password, repository_name, file) }} " - find file in repo
+###no encryption for creds done cause it is only for training
