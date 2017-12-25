@@ -1,0 +1,11 @@
+- name: test action plagin
+  hosts: localhost
+
+  tasks:
+    - name: test module
+      wtar:
+        url: 'http://ftp.byfly.by/pub/apache.org/tomcat/tomcat-8/v8.5.24/bin/apache-tomcat-8.5.24.tar.gz'
+
+    - name: test our plugin
+      action_wtar:
+        file: './link'

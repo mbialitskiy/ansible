@@ -13,4 +13,4 @@
 
   tasks:
   - debug:
-      msg : "{{ lookup('lookup_git', username, password, 'devops_lab', 'one.iml') }} "
+      msg : "{{ lookup('lookup_git', username, password) }} "
