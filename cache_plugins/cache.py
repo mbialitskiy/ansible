@@ -8,7 +8,7 @@ from ansible.errors import AnsibleError
 try:
     import mysql.connector
 except ImportError:
-    raise AnsibleError("No mysql lib found. Please, install 'pip install mysql-connector'")
+    raise AnsibleError("No mysql lib found. Please, install 'pip install mysql-connector-python'")
 
 class CacheModule(BaseCacheModule):
 
