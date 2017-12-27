@@ -1,7 +1,6 @@
 import json
 
 from ansible.plugins.cache.base import BaseCacheModule
-from ansible import constants as C
 from ansible.utils.display import Display
 from ansible.errors import AnsibleError
 
