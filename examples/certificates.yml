@@ -1,8 +1,6 @@
-- name : Practise with openssl module
-  vars_prompt:
-    - name: "secretfraze"
-      prompt: "Enter the secret phrase you want to use for certificats"
+- name : Practise with openssl module  
   vars:
+    secretfraze: ${certificate_passphrase}
     names:
       - 'www.example.com'
       - 'customer.example.com'
