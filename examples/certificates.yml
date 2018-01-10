@@ -1,6 +1,5 @@
 - name : Practise with openssl module  
   vars:
-#    secretfraze: ${certificate_passphrase}
     names:
       - 'www.example.com'
       - 'customer.example.com'
@@ -15,10 +14,6 @@
         path: ./CA.pem    
         passphrase: "{{secretfraze}}" 
         cipher: aes256
-
-    - name: debug
-      debug:
-        msg: "{{secretfraze}}"
 
     - name: create CA CSR
       openssl_csr:
