@@ -18,12 +18,6 @@
         passphrase: "{{secretfraze}}" 
         cipher: aes256
 
-    - name: test
-      debug:
-        msg: "{{ item }}"
-      with_items:
-        - "{{ names | replace('*','all') }}"
-
     - name: create CA CSR
       openssl_csr:
         path: ./CA.csr
