@@ -38,14 +38,14 @@
         path: "./{{item}}.csr"
         privatekey_path: ./CA.pem
         privatekey_passphrase : "{{secretfraze}}"
-        common_name: "{{item}}"
+        common_name: "{{item | replace ('all_sub_levels', '*')}}"
       with_items:
-        - "{{ names | replace('*','all') }}"
+        - "{{ names | replace('*','all_sub_levels') }}"
 
     - name: sign certificates
       shell: "openssl x509 -req -in ./{{item}}.csr -CA ./CA.crt -CAkey ./CA.pem -CAcreateserial -out ./{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
       with_items:
-        - "{{ names | replace('*','all') }}"
+        - "{{ names | replace('*','all_sub_levels') }}"
 
 
          
