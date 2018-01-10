@@ -1,31 +1,33 @@
 - name : Practise with openssl module  
   vars:
     secretfraze: 
-      "{{lookup('env','certificate_passphrase')}}"
-    names:
-      - 'www.example.com'
-      - 'customer.example.com'
-      - '*.datastore.example.com'
-
+      "{{ lookup('env','certificate_passphrase') }}"  
   hosts: localhost
 
   tasks:
+    - name: include sites-names
+      include_vars:
+        file: sites_names
+        name: names
+      when: secretfraze
 
     - name: create CA private key 
       openssl_privatekey:
         path: ./CA.pem    
-        passphrase: "{{secretfraze}}" 
-        cipher: aes256
+        passphrase: "{{ secretfraze }}" 
+        cipher: aes256   
+      when: secretfraze
 
     - name: create CA CSR
       openssl_csr:
-        path: ./CA.csr
-        privatekey_path: ./CA.pem
-        privatekey_passphrase: "{{secretfraze}}"
-        common_name: "Local Intermediate CA"
-        country_name: BY
-        organization_name: EPAM
-        email_address: test@test.com
+         path: ./CA.csr
+         privatekey_path: ./CA.pem
+         privatekey_passphrase: "{{ secretfraze }}"
+         common_name: "Local Intermediate CA"
+         country_name: BY
+         organization_name: EPAM
+         email_address: test@test.com
+      when: secretfraze
 
     - name: create CA certificate
       openssl_certificate:
@@ -33,22 +35,24 @@
         csr_path: ./CA.csr
         provider: selfsigned
         privatekey_path: ./CA.pem
-        privatekey_passphrase: "{{secretfraze}}"      
+        privatekey_passphrase: "{{ secretfraze }}"      
+      when: secretfraze
 
     - name: create CSRs
       openssl_csr:
         path: "./{{item}}.csr"
         privatekey_path: ./CA.pem
         privatekey_passphrase : "{{secretfraze}}"
-        common_name: "{{item | replace ('all_sub_levels', '*')}}"
-      with_items:
-        - "{{ names | replace('*','all_sub_levels') }}"
+        common_name: "{{ item | replace ('all_sub_levels', '*') }}"
+        with_items:
+          - "{{ names | replace('*','all_sub_levels') }}"
+      when: secretfraze 
 
     - name: sign certificates
       shell: "openssl x509 -req -in ./{{item}}.csr -CA ./CA.crt -CAkey ./CA.pem -CAcreateserial -out ./{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
       with_items:
         - "{{ names | replace('*','all_sub_levels') }}"
-
+      when: secretfraze
 
          
 
