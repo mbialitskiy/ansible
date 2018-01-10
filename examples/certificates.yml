@@ -16,6 +16,10 @@
         passphrase: "{{secretfraze}}" 
         cipher: aes256
 
+    - name: debug
+      debug:
+        msg: "{{secretfraze}}"
+
     - name: create CA CSR
       openssl_csr:
         path: ./CA.csr
