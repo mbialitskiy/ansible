@@ -9,14 +9,14 @@
       include_vars:
         file: sites_names
         name: names
-      when: secretfraze
+      when: secretfraze != "" 
 
     - name: create CA private key 
       openssl_privatekey:
         path: ./CA.pem    
         passphrase: "{{ secretfraze }}" 
         cipher: aes256   
-      when: secretfraze
+      when: secretfraze != ""
 
     - name: create CA CSR
       openssl_csr:
@@ -27,7 +27,7 @@
          country_name: BY
          organization_name: EPAM
          email_address: test@test.com
-      when: secretfraze
+      when: secretfraze != ""
 
     - name: create CA certificate
       openssl_certificate:
@@ -36,7 +36,7 @@
         provider: selfsigned
         privatekey_path: ./CA.pem
         privatekey_passphrase: "{{ secretfraze }}"      
-      when: secretfraze
+      when: secretfraze != ""
 
     - name: create CSRs
       openssl_csr:
@@ -46,13 +46,13 @@
         common_name: "{{ item | replace ('all_sub_levels', '*') }}"
         with_items:
           - "{{ names | replace('*','all_sub_levels') }}"
-      when: secretfraze 
+      when: secretfraze != ""
 
     - name: sign certificates
       shell: "openssl x509 -req -in ./{{item}}.csr -CA ./CA.crt -CAkey ./CA.pem -CAcreateserial -out ./{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
       with_items:
         - "{{ names | replace('*','all_sub_levels') }}"
-      when: secretfraze
+      when: secretfraze != ""
 
          
 
