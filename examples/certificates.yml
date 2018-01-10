@@ -1,0 +1,41 @@
+- name : Practise with openssl module
+  vars:
+    secretfraze : 'mbialitski'
+    names:
+      - 'www.example.com'
+      - 'customer.example.com'
+      - '*.datastore.example.com'
+
+  hosts: localhost
+
+  tasks:
+
+    - name: create private key for signing
+      openssl_privatekey:
+        path: ./private.pem    
+        passphrase: "{{secretfraze}}" 
+        cipher: aes256
+
+    - name: create CSRs
+      openssl_csr:
+        path: "{{ ['./',item , '.csr'] | join('') | replace('*','all') }}"
+        privatekey_path: ./private.pem
+        privatekey_passphrase : "{{secretfraze}}"
+        common_name: "{{item}}"
+      with_items:
+        - "{{names}}"
+
+    - name: create certs
+      openssl_certificate:
+        path: "{{ ['./',item , '.crt'] | join('') | replace('*','all') }}"
+        privatekey_path: ./private.pem
+        privatekey_passphrase: "{{secretfraze}}"
+        provider: selfsigned 
+        csr_path: "{{ ['./',item , '.csr'] | join('') | replace('*','all') }}"
+      with_items:
+        - "{{names}}"
+
+
+          
+
+   
