@@ -1,6 +1,6 @@
 - name : Practise with openssl module  
   vars:
-    secretfraze: ${certificate_passphrase}
+#    secretfraze: ${certificate_passphrase}
     names:
       - 'www.example.com'
       - 'customer.example.com'
