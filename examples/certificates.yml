@@ -1,5 +1,7 @@
 - name : Practise with openssl module  
   vars:
+    secretfraze: 
+      "{{lookup('env','certificate_passphrase')}}"
     names:
       - 'www.example.com'
       - 'customer.example.com'
