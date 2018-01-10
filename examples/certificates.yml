@@ -1,6 +1,8 @@
 - name : Practise with openssl module
+  vars_prompt:
+    - name: "secretfraze"
+      prompt: "Enter the secret phrase you want to use for certificats"
   vars:
-    secretfraze : 'mbialitski'
     names:
       - 'www.example.com'
       - 'customer.example.com'
@@ -35,6 +37,11 @@
       with_items:
         - "{{names}}"
 
+    - name: Save secret fraze to file. Don't forget to put it in a save place
+      copy:
+        content: "{{secretfraze}}" 
+        dest: ./secret_put_in_save_place.txt
+        mode: 0600  
 
           
 
