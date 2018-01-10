@@ -12,37 +12,51 @@
 
   tasks:
 
-    - name: create private key for signing
+    - name: create CA private key 
       openssl_privatekey:
-        path: ./private.pem    
+        path: ./CA.pem    
         passphrase: "{{secretfraze}}" 
         cipher: aes256
 
+    - name: test
+      debug:
+        msg: "{{ item }}"
+      with_items:
+        - "{{ names | replace('*','all') }}"
+
+    - name: create CA CSR
+      openssl_csr:
+        path: ./CA.csr
+        privatekey_path: ./CA.pem
+        privatekey_passphrase: "{{secretfraze}}"
+        common_name: "Local Intermediate CA"
+        country_name: BY
+        organization_name: EPAM
+        email_address: test@test.com
+
+    - name: create CA certificate
+      openssl_certificate:
+        path: ./CA.crt
+        csr_path: ./CA.csr
+        provider: selfsigned
+        privatekey_path: ./CA.pem
+        privatekey_passphrase: "{{secretfraze}}"      
+
     - name: create CSRs
       openssl_csr:
-        path: "{{ ['./',item , '.csr'] | join('') | replace('*','all') }}"
-        privatekey_path: ./private.pem
+        path: "./{{item}}.csr"
+        privatekey_path: ./CA.pem
         privatekey_passphrase : "{{secretfraze}}"
         common_name: "{{item}}"
       with_items:
-        - "{{names}}"
+        - "{{ names | replace('*','all') }}"
 
-    - name: create certs
-      openssl_certificate:
-        path: "{{ ['./',item , '.crt'] | join('') | replace('*','all') }}"
-        privatekey_path: ./private.pem
-        privatekey_passphrase: "{{secretfraze}}"
-        provider: selfsigned 
-        csr_path: "{{ ['./',item , '.csr'] | join('') | replace('*','all') }}"
+    - name: sign certificates
+      shell: "openssl x509 -req -in ./{{item}}.csr -CA ./CA.crt -CAkey ./CA.pem -CAcreateserial -out ./{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
       with_items:
-        - "{{names}}"
+        - "{{ names | replace('*','all') }}"
 
-    - name: Save secret fraze to file. Don't forget to put it in a save place
-      copy:
-        content: "{{secretfraze}}" 
-        dest: ./secret_put_in_save_place.txt
-        mode: 0600  
 
-          
+         
 
    
