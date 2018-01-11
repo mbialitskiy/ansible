@@ -14,8 +14,7 @@
     - block:
         - name: check names
           debug:
-            msg: "{{ item }}"
-          with_items: "{{ names }}"
+            msg: "{{ names }}"
  
         - name: create CA private key 
           openssl_privatekey:
