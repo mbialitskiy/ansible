@@ -7,7 +7,7 @@
   tasks:
     - name: include sites-names
       include_vars:
-        file: sites_names
+        file: ./sites_names
         name: names
       when: secretfraze != "" 
 
@@ -43,15 +43,15 @@
         path: "./{{item}}.csr"
         privatekey_path: ./CA.pem
         privatekey_passphrase : "{{secretfraze}}"
-        common_name: "{{ item | replace ('all_sub_levels', '*') }}"
+        common_name: "{{ item }}"
         with_items:
-          - "{{ names | replace('*','all_sub_levels') }}"
+          - "{{ names }}"
       when: secretfraze != ""
 
     - name: sign certificates
       shell: "openssl x509 -req -in ./{{item}}.csr -CA ./CA.crt -CAkey ./CA.pem -CAcreateserial -out ./{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
       with_items:
-        - "{{ names | replace('*','all_sub_levels') }}"
+        - "{{ names }}"
       when: secretfraze != ""
 
          
