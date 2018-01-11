@@ -9,7 +9,12 @@
       include_vars:
         file: ./sites_names
         name: names
-      when: secretfraze != "" 
+      when: secretfraze != ""
+
+    - name: check names
+      debug:
+        msg: "{{item}}"
+      with_items: "{{ names }}"
 
     - name: create CA private key 
       openssl_privatekey:
