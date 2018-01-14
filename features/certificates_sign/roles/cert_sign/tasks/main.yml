@@ -41,7 +41,7 @@
 
 
 - name: sign certificates
-  shell: "[ -f {{item}}.crt ] || openssl x509 -req -in ./csr/{{item}}.csr -CA CA.crt -CAkey CA.pem -out ./crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
+  shell: "[ -f crt/{{item}}.crt ] || openssl x509 -req -in csr/{{item}}.csr -CA CA.crt -CAkey CA.pem -CAcreateserial -out crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
   with_items:
     "{{ names }}"
   
