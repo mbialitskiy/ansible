@@ -1,0 +1,50 @@
+- name: include sites-names
+  include_vars:
+     file: sites_names
+     name: names
+      
+- name: check names
+  debug:
+    msg: "{{ names }}"
+
+- name: create dir for storing PK
+  file:
+    path: pk
+    state: directory    
+
+- name: create dir for storing CSR
+  file:
+    path: csr
+    state: directory
+
+- name: create dir for certificates
+  file: 
+    path: crt
+    state: directory
+
+- name: create PK for our items
+  openssl_privatekey:
+    path: "./pk/{{item}}.pem"
+    passphrase: "{{ secretfraze }}"
+    cipher: aes256
+  with_items:
+    "{{ names }}"
+
+- name: create CSRs
+  openssl_csr:
+    path: "./csr/{{item}}.csr"
+    privatekey_path: "./pk/{{item}}.pem"
+    privatekey_passphrase : "{{ secretfraze }}"
+    common_name: "{{ item }}"
+  with_items:
+    "{{ names }}"
+
+
+- name: sign certificates
+  shell: "[ -f {{item}}.crt ] || openssl x509 -req -in ./csr/{{item}}.csr -CA CA.crt -CAkey CA.pem -out ./crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
+  with_items:
+    "{{ names }}"
+  
+        
+
+   

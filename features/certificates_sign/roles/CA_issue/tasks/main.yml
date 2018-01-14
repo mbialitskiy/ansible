@@ -1,0 +1,27 @@
+- name: create CA private key 
+  openssl_privatekey:
+    path: ./CA.pem    
+    passphrase: "{{ secretfraze }}" 
+    cipher: aes256   
+
+- name: create CA CSR
+  openssl_csr:
+    path: ./CA.csr
+    privatekey_path: ./CA.pem
+    privatekey_passphrase: "{{ secretfraze }}"
+    common_name: "Local Intermediate CA"
+    country_name: BY
+    organization_name: EPAM
+    email_address: test@test.com
+    
+- name: create CA certificate
+  openssl_certificate:
+    path: ./CA.crt
+    csr_path: ./CA.csr
+    provider: selfsigned
+    privatekey_path: CA.pem
+    privatekey_passphrase: "{{ secretfraze }}"                  
+    
+        
+
+   

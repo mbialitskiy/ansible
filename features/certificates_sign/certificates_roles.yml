@@ -1,0 +1,20 @@
+- name : Practise with openssl module  
+   
+  vars:
+    secretfraze: 
+      "{{ lookup('env','certificate_passphrase') }}"  
+  hosts: localhost
+
+  tasks:
+
+    - name: print ENV
+      shell: "env"        
+
+  roles:
+    - { role: CA_issue, when: secretfraze != "" }
+    - { role: cert_sign, when: secretfraze != "" }
+     
+
+         
+
+   

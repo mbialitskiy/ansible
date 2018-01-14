@@ -1,24 +1,26 @@
 - name : Practise with openssl module  
+
   vars:
     secretfraze: 
       "{{ lookup('env','certificate_passphrase') }}"  
+
   hosts: localhost
 
-  tasks:
-    
+  tasks:  
+
     - name: include sites-names
       include_vars:
         file: ./sites_names
-        name: names
-      
+        name: names    
+
     - block:
         - name: check names
           debug:
-            msg: "{{ names }}"
- 
+            msg: "{{ names }}" 
+
         - name: create CA private key 
           openssl_privatekey:
-            path: ./CA.pem    
+            path: ./CA.pem   
             passphrase: "{{ secretfraze }}" 
             cipher: aes256   
 
@@ -30,8 +32,8 @@
             common_name: "Local Intermediate CA"
             country_name: BY
             organization_name: EPAM
-            email_address: test@test.com
-    
+            email_address: test@test.com   
+
         - name: create CA certificate
           openssl_certificate:
             path: ./CA.crt
@@ -39,7 +41,7 @@
             provider: selfsigned
             privatekey_path: ./CA.pem
             privatekey_passphrase: "{{ secretfraze }}"                  
-    
+
         - name: create CSRs
           openssl_csr:
             path: "./{{item}}.csr"
@@ -55,7 +57,3 @@
             "{{ names }}"
 
       when: secretfraze != "" and names != ""
-
-         
-
-   
