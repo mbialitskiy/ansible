@@ -7,7 +7,8 @@
 4. Select **Specific credentials**.
 5. If you already created a secret credential select it from drop down list, if not see item 6.
 6. Press **Add** button with a key picture. In **Kind** section choose **secret text**. Enter your desired passphrase in **Secret** edit. Don't neglact to fill **Description**.
-
+### You can create the job in Jenkins using the job_dsl.groovy file (you will need Job DSL Plugin to do that)
+#### If you will use this script don't forget to change the variables on your own at the head of the file.
 #### Both playbooks designed to use in Jenkins,but if you want to launch it from CLI you must add **-e "secretfraze=yoursecret"** at the end of your command:
 > ansible-playbook -c local certificates_roles.yml -e "secretfraze=my_secret"
 ### Theare two Playbooks:
