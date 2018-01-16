@@ -10,6 +10,6 @@ node {
 	        playbook:'features/certificates_sign/certificates_roles.yml',
                 ansibleName: 'ansible'  
         )
+   } 
  }
- 
 }
