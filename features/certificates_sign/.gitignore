@@ -2,6 +2,7 @@
 *.crt
 *.csr
 *.retry
+.gitignore
 
 crt/
 pk/

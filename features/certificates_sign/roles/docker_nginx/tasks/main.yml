@@ -10,4 +10,4 @@
     net: "host"
     volumes: "{{ volumes }}"
   become: true
-  become_method: sudo   
+  become_user: root
