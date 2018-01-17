@@ -7,24 +7,16 @@
   debug:
     msg: "{{ names }}"
 
-- name: create dir for storing PK
+- name: create dir for storing info 
   file:
-    path: pk
+    path: "out/{{item}}"
     state: directory    
-
-- name: create dir for storing CSR
-  file:
-    path: csr
-    state: directory
-
-- name: create dir for certificates
-  file: 
-    path: crt
-    state: directory
+  with_items:
+    "{{ folders }}"
 
 - name: create PK for our items
   openssl_privatekey:
-    path: "./pk/{{item}}.pem"
+    path: "./out/pk/{{item}}.pem"
     passphrase: "{{ secretfraze }}"
     cipher: aes256
   with_items:
@@ -32,19 +24,28 @@
 
 - name: create CSRs
   openssl_csr:
-    path: "./csr/{{item}}.csr"
-    privatekey_path: "./pk/{{item}}.pem"
+    path: "./out/csr/{{item}}.csr"
+    privatekey_path: "./out/pk/{{item}}.pem"
     privatekey_passphrase : "{{ secretfraze }}"
     common_name: "{{ item }}"
+    country_name: "{{ cert_defaults.country_name }}"
+    email_address: "{{ cert_defaults.email_address }}"
+    organization_name: "{{ cert_defaults.organization_name }}"
+    organizational_unit_name: "{{ cert_defaults.organizational_unit_name }}" 
   with_items:
     "{{ names }}"
-
 
 - name: sign certificates
-  shell: "[ -f crt/{{item}}.crt ] || openssl x509 -req -in csr/{{item}}.csr -CA CA.crt -CAkey CA.pem -CAcreateserial -out crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
+  shell: "openssl x509 -req -in out/csr/{{item}}.csr -CA out/CA.crt -CAkey out/CA.pem -CAcreateserial -out out/crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}}"
+  args:
+    creates: "/out/crt/{{item}}.crt"
   with_items:
     "{{ names }}"
-  
+ 
+- name: create no pass certs
+  shell: " openssl rsa -in out/pk/{{item}}.pem -out out/pk/{{item}}.nopass.pem -passin pass:{{secretfraze}}"
+  with_items:
+   "{{ names }}"
         
 
    

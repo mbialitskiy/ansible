@@ -1,13 +1,18 @@
+- name: create output folder
+  file:
+    name: "out"
+    state: directory
+
 - name: create CA private key 
   openssl_privatekey:
-    path: ./CA.pem    
+    path: "./out/CA.pem"    
     passphrase: "{{ secretfraze }}" 
     cipher: aes256   
 
 - name: create CA CSR
   openssl_csr:
-    path: ./CA.csr
-    privatekey_path: ./CA.pem
+    path: ./out/CA.csr
+    privatekey_path: ./out/CA.pem
     privatekey_passphrase: "{{ secretfraze }}"
     common_name: "Local Intermediate CA"
     country_name: BY
@@ -16,10 +21,10 @@
     
 - name: create CA certificate
   openssl_certificate:
-    path: ./CA.crt
-    csr_path: ./CA.csr
+    path: ./out/CA.crt
+    csr_path: ./out/CA.csr
     provider: selfsigned
-    privatekey_path: CA.pem
+    privatekey_path: ./out/CA.pem
     privatekey_passphrase: "{{ secretfraze }}"                  
     
         

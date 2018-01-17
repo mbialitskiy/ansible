@@ -1,0 +1,10 @@
+folders:
+  - pk
+  - crt
+  - csr
+cert_defaults:
+  country_name : BY
+  email_address: test@test.com
+  organization_name: EPAM
+  organizational_unit_name: DevOps
+  
