@@ -10,4 +10,4 @@
     net: "host"
     volumes: "{{ volumes }}"
   become: true
-  become_user: root
+  become_user: vagrant
