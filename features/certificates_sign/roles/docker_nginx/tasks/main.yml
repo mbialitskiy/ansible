@@ -9,4 +9,4 @@
     state: started
     net: "host"
     volumes: "{{ volumes }}"
-  become_user: vagrant
+  become: true
