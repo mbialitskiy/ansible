@@ -27,4 +27,4 @@
 * CA.crt - CA certificate. Use it to sign our certificates and to confirm released certificates authenticity
 * CA.csr - certificate signing request. 
 #### Site-names are stored in **site_names** file in root folder in dict style:
-> {'www.example.com','customer.example.com', '*.datastore.example.com'}
+> {'www.example.com','customer.example.com', '*.datastore.example.com'} .
