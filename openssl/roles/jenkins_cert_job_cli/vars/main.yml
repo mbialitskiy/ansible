@@ -1,5 +1,5 @@
 git:
-  url: 'https://github.com/mbialitskiy/ansible-.git' 
+  url: 'https://github.com/mbialitskiy/ansible.git' 
   branch: '*/certificates_sign'
 ansible:
   playbook: '${WORKSPACE}/features/certificates_sign/certificates_roles.yml'
@@ -7,5 +7,10 @@ ansible:
 secret_wrapper:
   cred_id: 'certificate_passphrase'
   variable_name: 'certificate_passphrase'
-jenkins_home: '/var/lib/jenkins' 
+jenkins_home: '/var/lib/jenkins'
+jenkins_cli_path: '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'
+jenkins_host: 'localhost'
+jenkins_port: '8080' 
+jenkins_token: 'f118cc8842a29b2783b17de6288314ab'
+jenkins_admin_user: 'admin'
 jenkins_job_name: 'openssl_certs'

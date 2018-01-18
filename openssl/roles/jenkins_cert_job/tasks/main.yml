@@ -23,13 +23,13 @@
 
 - name: wait until jenkins is up
   wait_for:
-    host: 'localhost'
-    port: 8080
+    host: "{{jenkins_host}}"
+    port: "{{jenkins_port"
     delay: 30 
 
 - name: get a crumb for jenkins remote
   uri:
-    url: "http://admin:{{token}}@localhost:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
+    url: "http://{{jenkins_admin_user}}:{{token}}@{{jenkins_host}}:{{jenkins_port}}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
     force_basic_auth: yes 
     return_content: yes
   register: crumb
@@ -40,7 +40,7 @@
     crumb_dict:
        Jenkins-Crumb: "{{crumb.content[14:]}}" 
   uri: 
-    url: "http://admin:{{token}}@localhost:8080/job/{{jenkins_job_name}}/build"
+    url: "http://{{jenkins_admin_user}}:{{token}}@{{jenkins_host}}:{{jenkins_port}}/job/{{jenkins_job_name}}/build"
     method: POST
     force_basic_auth: yes
     status_code: 201

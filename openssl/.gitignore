@@ -1,2 +1,7 @@
 out/
 conf/
+files/
+
+*test*
+.gitignore
+
