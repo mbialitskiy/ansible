@@ -1,0 +1,12 @@
+- name: pwd
+  command: pwd
+
+- name: Copy job template
+  template:
+     src: job_conf.j2
+     dest: files/config.xml  
+
+- name: create job
+  shell: "java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:24788/ -http -auth admin:{AQAAABAAAAAwfc4YDF5xGunK5lGEFeQ+qjfke6XK317sxLtWD47p7bdn9ru9efTFx2NabCQzSX05BLOG2Ml8OrkqXSYIF/tL8Q==} create-job {{jenkins_job_name}} < files/config.xml"
+  become: true
+  become_user: jenkins

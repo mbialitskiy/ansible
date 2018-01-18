@@ -1,0 +1,15 @@
+folders:
+  - pk
+  - crt
+  - csr
+#  - pkcs12
+  - v3
+delete_folders:
+  - csr
+  - v3
+cert_defaults:
+  country_name : BY
+  email_address: test@test.com
+  organization_name: EPAM
+  organizational_unit_name: DevOps
+  

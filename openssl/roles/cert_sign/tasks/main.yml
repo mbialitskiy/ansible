@@ -1,0 +1,71 @@
+- name: include sites-names
+  include_vars:
+     file: sites_names
+     name: names
+      
+- name: check names
+  debug:
+    msg: "{{ names }}"
+
+- name: create dir for storing info 
+  file:
+    path: "out/{{item}}"
+    state: directory    
+  with_items:
+    "{{ folders }}"
+
+- name: create PK for our items
+  openssl_privatekey:
+    path: "./out/pk/{{item}}.pem"
+    passphrase: "{{ secretfraze }}"
+    cipher: aes256
+  with_items:
+    "{{ names }}"
+
+- name: create CSRs
+  openssl_csr:
+    path: "./out/csr/{{item}}.csr"
+    privatekey_path: "./out/pk/{{item}}.pem"
+    privatekey_passphrase : "{{ secretfraze }}"
+    common_name: "{{ item }}"
+    country_name: "{{ cert_defaults.country_name }}"
+    email_address: "{{ cert_defaults.email_address }}"
+    organization_name: "{{ cert_defaults.organization_name }}"
+    organizational_unit_name: "{{ cert_defaults.organizational_unit_name }}"
+  with_items:
+    "{{ names }}"
+
+- name: prepare v3 extensions for certificates
+  template:
+    src: v3_ext.j2
+    dest: "out/v3/{{item}}.ext"
+  with_items:
+    "{{ names }}"
+
+- name: sign certificates
+  shell: 
+    "openssl x509 -req -in out/csr/{{item}}.csr -CA out/CA.crt -CAkey out/CA.pem -CAcreateserial -out out/crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}} -extfile out/v3/{{item}}.ext"
+  args:
+    creates: "/out/crt/{{item}}.crt"    
+  with_items:
+    "{{ names }}"
+
+- name: clean the mess
+  file:
+    path: "{{item}}/"
+    state: absent
+  with_items:
+    "{{ delete_folders}}"
+    
+  
+#- name: create no pass certs
+#  shell: " openssl rsa -in out/pk/{{item}}.pem -out out/pk/{{item}}.nopass.pem -passin pass:{{secretfraze}}"
+#  with_items:
+#   "{{ names }}"
+
+#- name: create cert for browsers
+#  shell: "openssl pkcs12 -export -in out/crt/{{item}}.crt -inkey out/pk/{{item}}.nopass.pem -certfile out/CA.crt -out out/pkcs12/{{item}}.p12 -passout pass:{{secretfraze}}"
+#  with_items:
+#    "{{ names }}"        
+
+   

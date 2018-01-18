@@ -1,0 +1,31 @@
+[ req ]
+default_bits = 2048
+
+encrypt_key = no
+
+default_md = sha256
+x509_extensions = v3_ca
+
+prompt = no
+
+utf8 = yes
+
+distinguished_name = my_req_distinguished_name
+
+[ my_req_distinguished_name ]
+C = {{default.ca.country}}
+ST = {{default.ca.state}} 
+L = {{default.ca.locality}}
+O  = {{default.ca.organization}}
+CN = {{default.ca.common_name}}
+OU = {{default.ca.organizational_unit}}
+
+[ my_subject_alt_names ]
+{{default.ca.dns}}
+
+[ v3_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+

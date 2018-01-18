@@ -1,0 +1,10 @@
+default:
+  ca:
+    country: 'BY'
+    state: 'Minsk'
+    locality: 'Minsk'
+    organization: 'Epam'
+    common_name: 'Local intermediate CA'
+    organizational_unit: 'Banch'
+    dns: 'DNS = *.example.com'  
+       

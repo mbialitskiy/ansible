@@ -1,0 +1,51 @@
+- name: create output folder
+  file:
+    name: "out"
+    state: directory
+
+- name: create CA private key 
+  openssl_privatekey:
+    path: "./out/CA.pem"    
+    passphrase: "{{ secretfraze }}" 
+    cipher: aes256   
+
+- name: prepare config file for CA cert
+  template:
+    src: csr_conf.j2
+    dest: out/csr.conf
+
+#- name: create CA CSR
+#  openssl_csr:
+#    path: ./out/CA.csr
+#    privatekey_path: ./out/CA.pem
+#    privatekey_passphrase: "{{ secretfraze }}"
+#    common_name: "Local Intermediate CA"
+#    country_name: BY
+#    organization_name: EPAM
+#    organizational_unit_name: Banch
+#    locality_name: Minsk
+#    email_address: test@test.com
+    
+#- name: create CA certificate
+#  openssl_certificate:
+#    path: ./out/CA.crt
+#   csr_path: ./out/CA.csr
+#    provider: selfsigned
+#    privatekey_path: ./out/CA.pem
+#    privatekey_passphrase: "{{ secretfraze }}"                  
+#    issuer:
+#      CN: Local Intermediate CA/emailAddress=ca@ca.org
+#      L: Minsk
+#      ST: Minsk
+#      O: EPAM
+#      OU: Banch
+#      C: BY
+
+- name: create CA cert with shell
+  shell: "openssl req -new -x509 -key out/CA.pem -out out/CA.crt -config out/csr.conf -passin pass:{{secretfraze}}"
+      
+      
+
+        
+
+   

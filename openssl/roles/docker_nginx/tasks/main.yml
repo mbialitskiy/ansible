@@ -1,0 +1,12 @@
+- name: run docker with nginx
+  vars:
+    volumes:
+      - '/home/vagrant/ansible/ansible-/features/certificates_sign/out:/crt'
+      - '/home/vagrant/ansible/ansible-/features/certificates_sign/conf:/etc/nginx/conf.d'
+  docker:
+    name: nginx
+    image: nginx
+    state: started
+    net: "host"
+    volumes: "{{ volumes }}"
+  become: true
