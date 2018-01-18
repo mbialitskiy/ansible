@@ -1,8 +1,25 @@
+- name: get the names of sites
+  include_vars:
+    file: sites_names
+    name: names
+
+- name: create dir for configs and mount
+  file:
+    path: "{{path_to_nginx_confs}}"
+    state: directory
+
+- name: generate configs for sites
+  template:  
+     src: vhost.j2
+     dest: "conf/{{item}}.conf" 
+  with_items:
+     "{{ names }}"
+  
 - name: run docker with nginx
   vars:
     volumes:
-      - '/home/vagrant/ansible/ansible-/features/certificates_sign/out:/crt'
-      - '/home/vagrant/ansible/ansible-/features/certificates_sign/conf:/etc/nginx/conf.d'
+      - "{{path_to_certs}}:/crt"
+      - "{{path_to_nginx_confs}}:/etc/nginx/conf.d"
   docker:
     name: nginx
     image: nginx

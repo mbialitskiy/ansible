@@ -56,12 +56,11 @@
     state: absent
   with_items:
     "{{ delete_folders}}"
-    
-  
-#- name: create no pass certs
-#  shell: " openssl rsa -in out/pk/{{item}}.pem -out out/pk/{{item}}.nopass.pem -passin pass:{{secretfraze}}"
-#  with_items:
-#   "{{ names }}"
+      
+- name: create no pass certs for nginx starts without password prompt
+  shell: " openssl rsa -in out/pk/{{item}}.pem -out out/pk/{{item}}.nopass.pem -passin pass:{{secretfraze}}"
+  with_items:
+   "{{ names }}"
 
 #- name: create cert for browsers
 #  shell: "openssl pkcs12 -export -in out/crt/{{item}}.crt -inkey out/pk/{{item}}.nopass.pem -certfile out/CA.crt -out out/pkcs12/{{item}}.p12 -passout pass:{{secretfraze}}"
