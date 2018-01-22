@@ -26,4 +26,6 @@
     state: started
     net: "host"
     volumes: "{{ volumes }}"
+    become: true
+    become_method: sudo
   
