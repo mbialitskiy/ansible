@@ -38,7 +38,9 @@
 ##### To find a **token** go to url *http://jenkins/me/configure* and hit **show token**
 #### Jenkins_cert_job_cli role:
 ##### This role do pretty much the same that previous one but uses jenkins-cli.jar for creating and running job.
-
+#### Don't forget do add this lines to your sudoers file:
+> jenkins ALL=(ALL) NOPASSWD:/bin/sh
+> jenkins ALL=(ALL) NOPASSWD:/path/to/docker
 ## If you choose **certificates.yml** to use all output files will be placed in the current folder.
 #### Both plays creates next files in the current folder:
 * CA.pem - private key for our CA. Keep it in save place and use for signing your certificates.
