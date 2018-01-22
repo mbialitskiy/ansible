@@ -8,7 +8,7 @@
   roles:
     - { role: CA_issue, when: secretfraze != "" }
     - { role: cert_sign, when: secretfraze != "" }
-    - { role: docker_nginx, path_to_certs: "/home/vagrant/ansible/ansible/openssl/out", path_to_nginx_confs: "/home/vagrant/ansible/ansible/openssl/conf", when: secretfraze != ""}
+    - { role: docker_nginx, path_to_certs: "out", path_to_nginx_confs: "conf", when: secretfraze != ""}
      
 
          
