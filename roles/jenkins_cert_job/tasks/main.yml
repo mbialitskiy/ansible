@@ -11,20 +11,14 @@
      src: job_conf.j2
      dest: "{{jenkins_home}}/jobs/{{jenkins_job_name}}/config.xml"  
      owner: jenkins
+  notify: restart jenkins
   become: true
   become_user: jenkins
-
-- name: restart jenkins
-  service:
-    name: jenkins
-    state: restarted
-  become: true
-  become_method: sudo
 
 - name: wait until jenkins is up
   wait_for:
     host: "{{jenkins_host}}"
-    port: "{{jenkins_port"
+    port: "{{jenkins_port}}"
     delay: 30 
 
 - name: get a crumb for jenkins remote
