@@ -16,7 +16,7 @@
 
 - name: create PK for our items
   openssl_privatekey:
-    path: "./out/pk/{{item}}.pem"
+    path: "{{playbook_dir}}/out/pk/{{item}}.pem"
     passphrase: "{{ secretfraze }}"
     cipher: aes256
   with_items:
@@ -24,8 +24,8 @@
 
 - name: create CSRs
   openssl_csr:
-    path: "./out/csr/{{item}}.csr"
-    privatekey_path: "./out/pk/{{item}}.pem"
+    path: "{{playbook_dir}}/out/csr/{{item}}.csr"
+    privatekey_path: "{{playbook_dir}}/out/pk/{{item}}.pem"
     privatekey_passphrase : "{{ secretfraze }}"
     common_name: "{{ item }}"
     country_name: "{{ cert_defaults.country_name }}"
@@ -44,9 +44,16 @@
 
 - name: sign certificates
   shell: 
-    "openssl x509 -req -in out/csr/{{item}}.csr -CA out/CA.crt -CAkey out/CA.pem -CAcreateserial -out out/crt/{{item}}.crt -days 365 -passin pass:{{secretfraze}} -extfile out/v3/{{item}}.ext"
+    "openssl x509 -req -in {{playbook_dir}}/out/csr/{{item}}.csr 
+                       -CA {{playbook_dir}}/out/CA.crt 
+                       -CAkey {{playbook_dir}}/out/CA.pem 
+                       -CAcreateserial 
+                       -out {{playbook_dir}}/out/crt/{{item}}.crt 
+                       -days 365 
+                       -passin pass:{{secretfraze}} 
+                       -extfile {{playbook_dir}}/out/v3/{{item}}.ext"
   args:
-    creates: "/out/crt/{{item}}.crt"    
+    creates: "{{playbook_dir}}/out/crt/{{item}}.crt"    
   with_items:
     "{{ names }}"
 
@@ -58,7 +65,10 @@
     "{{ delete_folders}}"
       
 - name: create no pass certs for nginx starts without password prompt
-  shell: " openssl rsa -in out/pk/{{item}}.pem -out out/pk/{{item}}.nopass.pem -passin pass:{{secretfraze}}"
+  shell: 
+    "openssl rsa -in {{playbook_dir}}/out/pk/{{item}}.pem 
+                 -out {{playbook_dir}}/out/pk/{{item}}.nopass.pem 
+                 -passin pass:{{secretfraze}}"
   with_items:
    "{{ names }}"
 

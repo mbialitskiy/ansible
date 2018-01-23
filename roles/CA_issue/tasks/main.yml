@@ -5,7 +5,7 @@
 
 - name: create CA private key 
   openssl_privatekey:
-    path: "./out/CA.pem"    
+    path: "{{playbook_dir}}/out/CA.pem"    
     passphrase: "{{ secretfraze }}" 
     cipher: aes256   
 
@@ -42,7 +42,11 @@
 #      C: BY
 
 - name: create CA cert with shell
-  shell: "openssl req -new -x509 -key out/CA.pem -out out/CA.crt -config out/csr.conf -passin pass:{{secretfraze}}"
+  shell: 
+    "openssl req -new -x509 -key {{playbook_dir}}/out/CA.pem 
+                            -out {{playbook_dir}}/out/CA.crt 
+                            -config {{playbook_dir}}/out/csr.conf 
+                            -passin pass:{{secretfraze}}"
       
       
 
