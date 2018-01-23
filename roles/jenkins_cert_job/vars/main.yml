@@ -2,7 +2,7 @@ git:
   url: 'https://github.com/mbialitskiy/ansible.git' 
   branch: '*/certificates_sign'
 ansible:
-  playbook: '${WORKSPACE}/features/certificates_sign/certificates_roles.yml'
+  playbook: 'certificates_roles.yml'
   name: 'ansible'
 secret_wrapper:
   cred_id: 'certificate_passphrase'
