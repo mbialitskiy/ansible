@@ -5,8 +5,8 @@ folders:
 #  - pkcs12
   - v3
 delete_folders:
-  - /out/csr
-  - /out/v3
+  - out/csr
+  - out/v3
 cert_defaults:
   country_name : BY
   email_address: test@test.com
