@@ -16,7 +16,7 @@ job('AnsibleSSL') {
     }
 
   steps {
-    ansiblePlaybook('features/certificates_sign/certificates_roles.yml') {       
+    ansiblePlaybook('certificates_roles.yml') {       
         ansibleName(ansible_name)       
               
     }
