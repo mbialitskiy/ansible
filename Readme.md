@@ -32,16 +32,16 @@
 #### Docker_nginx role:
 ##### This role is developed to start docker container with nginx from playbook
 ##### The **templates** folder stores the **vhost.j2** template config file for nginx
+##### Don't forget do add this lines to your sudoers file:
+> jenkins ALL=(ALL) NOPASSWD:/bin/sh
+> jenkins ALL=(ALL) NOPASSWD:/path/to/docker
 #### Jenkins_cert_job role:
 ##### This role creates a new job for issue certificates in your Jenkins from ansible by copying preconfigured xml job config to your jenkins job directory. After that the jenkins is restarted and the job is called to run. 
 ##### In **templates** folder there is the xml j2 template for a jenkins job. Default variables values are stored in **vars**
 ##### To find a **token** go to url *http://jenkins/me/configure* and hit **show token**
 #### Jenkins_cert_job_cli role:
 ##### This role do pretty much the same that previous one but uses jenkins-cli.jar for creating and running job.
-#### Don't forget do add this lines to your sudoers file:
-> jenkins ALL=(ALL) NOPASSWD:/bin/sh
-> jenkins ALL=(ALL) NOPASSWD:/path/to/docker
-## If you choose **certificates.yml** to use all output files will be placed in the current folder.
+# If you choose **certificates.yml** to use all output files will be placed in the current folder.
 #### Both plays creates next files in the current folder:
 * CA.pem - private key for our CA. Keep it in save place and use for signing your certificates.
 * CA.crt - CA certificate. Use it to sign our certificates and to confirm released certificates authenticity
